@@ -1,6 +1,7 @@
 import { cart } from '../data/cart.js';
 import { products } from '../data/products.js';
 import { formateCurrency } from './utils/money.js';
+import { removeFromCart } from '../data/cart.js';
 
 // Use 'let' to allow modification
 let ordersHTML = '';
@@ -40,7 +41,8 @@ cart.forEach((cartItem) => {
               <span class="update-quantity-link link-primary">
                 Update
               </span>
-              <span class="delete-quantity-link link-primary">
+              <span class="delete-quantity-link link-primary 
+              js-delete-link" data-product-id="${product.id}">
                 Delete
               </span>
             </div>
@@ -94,3 +96,13 @@ console.log('gggggggg') ;
 
 // Inject the dynamically created HTML into the document
 document.querySelector('.order-summary').innerHTML = ordersHTML;
+
+document.querySelectorAll('.js-delete-link').forEach((link)=>{
+    link.addEventListener('click',()=>{
+        const productId=link.dataset.productId;
+        console.log(productId) ;
+        removeFromCart(productId);
+        console.log(cart) ;
+        
+    })
+})
