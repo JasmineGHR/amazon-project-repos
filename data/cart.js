@@ -7,7 +7,7 @@ export let cart=[{
     quantity: 1
 }];
 
-
+console.log(cart)
 export function addToCart(productId) {
     let matchItem ;
     cart.forEach((item)=>{
@@ -37,4 +37,5 @@ export function removeFromCart(productId){
         }
     })
     cart=newCart ;
+    
 }

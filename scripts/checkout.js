@@ -19,7 +19,7 @@ cart.forEach((cartItem) => {
   // Ensure the product is found before using it
   if (product) {
     ordersHTML += `
-      <div class="cart-item-container">
+      <div class="cart-item-container js-cart-item-container-${product.id}">
         <div class="delivery-date">
           Delivery date: Tuesday, June 21
         </div>
@@ -102,7 +102,9 @@ document.querySelectorAll('.js-delete-link').forEach((link)=>{
         const productId=link.dataset.productId;
         console.log(productId) ;
         removeFromCart(productId);
-        console.log(cart) ;
-        
+       
+        const container = document.querySelector(`.js-cart-item-container-${productId}`)
+        console.log(container) ;
+        container.remove() ;
     })
 })
