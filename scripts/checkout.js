@@ -11,19 +11,21 @@ console.log(deliveryDate.format('dddd, MMMM D'));
 console.log(deliveryDate) ;
 console.log('ffffffffffffffffff') ;
 
+function renderOrderSummary(){
 
-// Use 'let' to allow modification
-let ordersHTML = '';
 
-// Loop through each cart item to build the HTML
-cart.forEach((cartItem) => {
-  // Find the matching product
-  let product;
-  products.forEach((productItem) => {
+    // Use 'let' to allow modification
+    let ordersHTML = '';
+
+    // Loop through each cart item to build the HTML
+    cart.forEach((cartItem) => {
+    // Find the matching product
+    let product;
+    products.forEach((productItem) => {
     if (productItem.id === cartItem.productId ) {
-      product = productItem;
+        product = productItem;
     }
-  });
+    });
 
     const deliveryOptionId=cartItem.deliveryOptionId;
     let deliveryOption ;
@@ -39,51 +41,55 @@ cart.forEach((cartItem) => {
         'days'
     );
     const dateString=deliveryDate.format('dddd, MMMM D') ;
-    
+
 
 
     ordersHTML += `
-      <div class="cart-item-container js-cart-item-container-${product.id}">
-        <div class="delivery-date">
-          Delivery date: ${dateString}
+        <div class="cart-item-container js-cart-item-container-${product.id}">
+        <div class="delivery-date js-delivery-date">
+            Delivery date: ${dateString}
         </div>
 
         <div class="cart-item-details-grid">
-          <img class="product-image" src="${product.image}">
+            <img class="product-image" src="${product.image}">
 
-          <div class="cart-item-details">
+            <div class="cart-item-details">
             <div class="product-name">
-              ${product.name}
+                ${product.name}
             </div>
             <div class="product-price">
-              $${formateCurrency(product.priceCents)}
+                $${formateCurrency(product.priceCents)}
             </div>
             <div class="product-quantity">
-              <span>
+                <span>
                 Quantity: <span class="quantity-label">${cartItem.quantity}</span>
-              </span>
-              <span class="update-quantity-link link-primary">
+                </span>
+                <span class="update-quantity-link link-primary">
                 Update
-              </span>
-              <span class="delete-quantity-link link-primary 
-              js-delete-link" data-product-id="${product.id}">
+                </span>
+                <span class="delete-quantity-link link-primary 
+                js-delete-link" data-product-id="${product.id}">
                 Delete
-              </span>
+                </span>
             </div>
-          </div>
+            </div>
 
-          <div class="delivery-options">
+            <div class="delivery-options">
             <div class="delivery-options-title">
-              Choose a delivery option:
+                Choose a delivery option:
             </div>
-           ${deliveryOptionsHTML(product,cartItem)}
-          </div>
+            ${deliveryOptionsHTML(product,cartItem)}
+            </div>
         </div>
-      </div>`;
-  
-});
+        </div>`;
 
-function deliveryOptionsHTML(product,cartItem){
+    });
+
+    function setDeliveryDate(){
+
+    }
+
+    function deliveryOptionsHTML(product,cartItem){
     let html='';
 
     deliveryOptions.forEach((deliveryOption)=>{
@@ -102,44 +108,48 @@ function deliveryOptionsHTML(product,cartItem){
         html+=`<div class="delivery-option js-delivery-option"
                 data-product-id="${product.id}"
                 data-delivery-option-id="${deliveryOption.id}">
-              <input type="radio" ${isChecked ? 'checked': ''} class="delivery-option-input" 
-              name="delivery-option-${product.id}">
-              <div>
+                <input type="radio" ${isChecked ? 'checked': ''} class="delivery-option-input" 
+                name="delivery-option-${product.id}">
+                <div>
                 <div class="delivery-option-date">
-                  ${dateString}
+                    ${dateString}
                 </div>
                 <div class="delivery-option-price">
-                  ${priceString} Shipping
+                    ${priceString} Shipping
                 </div>
-              </div>
+                </div>
             </div>
         `;
     });
     return html;
-}
+    }
 
-console.log(ordersHTML) ;
-console.log('gggggggg') ;
+    console.log(ordersHTML) ;
+    console.log('gggggggg') ;
 
-// Inject the dynamically created HTML into the document
-document.querySelector('.order-summary').innerHTML = ordersHTML;
+    // Inject the dynamically created HTML into the document
+    document.querySelector('.order-summary').innerHTML = ordersHTML;
 
-document.querySelectorAll('.js-delete-link').forEach((link)=>{
+    document.querySelectorAll('.js-delete-link').forEach((link)=>{
     link.addEventListener('click',()=>{
         const productId=link.dataset.productId;
         console.log(productId) ;
         removeFromCart(productId);
-       
+        
         const container = document.querySelector(`.js-cart-item-container-${productId}`)
         console.log(container) ;
         container.remove() ;
     })
-})
+    })
 
-document.querySelectorAll('.js-delivery-option')
-.forEach((element)=>{
+ document.querySelectorAll('.js-delivery-option')
+    .forEach((element)=>{
     const {productId, deliveryOptionId}=element.dataset;
     element.addEventListener('click',()=>{
         UpdateDeliveryOptionId(productId, deliveryOptionId) ;
+        renderOrderSummary();
     })
-})
+    })
+}
+
+renderOrderSummary() ;
