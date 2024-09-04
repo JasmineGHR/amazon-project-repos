@@ -658,3 +658,14 @@ export const products = [
     ]
   }
 ];
+
+export function getProduct(productId){
+  let product;
+    products.forEach((productItem) => {
+    if (productItem.id === cartItem.productId ) {
+        product = productItem;
+    }
+    });
+
+    return product ;
+}
